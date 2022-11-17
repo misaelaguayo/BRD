@@ -17,6 +17,8 @@ class Lox:
         raise NotImplementedError("Has not been implemented yet!")
 
     def __init__(self) -> None:
+        self.hadError = false
+
         if len(sys.argv) > 2:
             raise Exception("Usage:plox [script]")
             return
