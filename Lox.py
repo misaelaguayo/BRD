@@ -21,7 +21,6 @@ class Lox:
 
         if len(sys.argv) > 2:
             raise Exception("Usage:plox [script]")
-            return
         elif len(sys.argv) == 2:
             self.runFile(sys.argv[0])
         else:
