@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from typing import Dict
+from typing import Any
 
 class TokenType(Enum):
     # Single-character tokens
@@ -50,7 +50,7 @@ class TokenType(Enum):
     EOF = auto()
 
 class Token:
-    def __init__(self, type: TokenType, lexeme: str, literal: Dict, line: int):
+    def __init__(self, type: TokenType, lexeme: str, literal: Any, line: int):
         self.type = type
         self.lexeme = lexeme
         self.literal = literal

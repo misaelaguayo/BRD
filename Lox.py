@@ -1,5 +1,17 @@
 import sys
 
+
+"""
+Lox syntactic grammar:
+
+epxression -> literal | unary | binary | grouping
+literal -> NUMBER | STRING | 'true' | 'false' | 'nil'
+grouping -> "(" expression ")"
+unary -> ("-" | "!") expression
+binary -> expression operator expression
+operator -> "==" | "!=" | "<" | "<=" | ">" | "+" | "-" | "*" | "/"
+"""
+
 class Lox:
     def run(self, source: str) -> None:
         tokens = source.split(" ")
