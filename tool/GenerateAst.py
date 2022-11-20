@@ -9,7 +9,18 @@ class GenerateAst:
         for field in fields:
             name = field.split(":")[0]
             output.write(f"\t\tself.{name}={name}\n")
-        output.write("\n")
+        output.write("\tdef accept(self, visitor):\n")
+        output.write(f"\t\treturn visitor.visit{className}{baseName}(self)\n")
+        output.write("\n\n")
+
+    def defineVisitor(self, output, baseName: str, types: List[str]):
+        output.write(f"class Visitor(ABC):\n")
+        for type in types:
+            typeName: str = type.split("|")[0].strip()
+            output.write("\t@abstractmethod\n")
+            output.write(f"\tdef visit{typeName}{baseName}(self, {baseName.lower()}):\n")
+            output.write("\t\t...\n")
+            output.write("\n")
 
     def defineAst(self, outputDir: str, baseName: str, types: List[str]) -> None:
         path = outputDir + "/" + baseName + ".py"
@@ -17,10 +28,14 @@ class GenerateAst:
         with open(path, "w", encoding="utf-8") as output:
             output.write("# Automatically generated using tool/GeneratedAst.py\n")
             output.write(f"# {types}\n\n")
+            output.write("from abc import ABC, abstractmethod\n")
             output.write("from TokenType import *\n")
-            output.write("from typing import Any\n")
-            output.write(f"class {baseName}:\n")
-            output.write("\t...\n")
+            output.write("from typing import Any\n\n")
+            output.write(f"class {baseName}(ABC):\n")
+            output.write(f"\t@abstractmethod\n")
+            output.write(f"\tdef accept(self, visitor):\n")
+            output.write("\t\t...\n\n")
+            self.defineVisitor(output, baseName, types)
 
             for type in types:
                 className = type.split("|")[0].strip()
