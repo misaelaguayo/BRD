@@ -4,12 +4,24 @@ import sys
 """
 Lox syntactic grammar:
 
+ambiguous grammar
+---------------------------------------------------------------
 epxression -> literal | unary | binary | grouping
 literal -> NUMBER | STRING | 'true' | 'false' | 'nil'
 grouping -> "(" expression ")"
 unary -> ("-" | "!") expression
 binary -> expression operator expression
 operator -> "==" | "!=" | "<" | "<=" | ">" | "+" | "-" | "*" | "/"
+
+unambiguous grammar
+---------------------------------------------------------------
+primary -> equality
+equality -> comparison(("!="|"==") comparison)*
+comparison -> term((">"|">="|"<"|"<=")term)*
+term -> factor(("-"|"+")factor)*
+primary -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
+unary -> ("!"|"-") unary | primary
+factor -> unary(("/"|"*")unary)*
 """
 
 class Lox:
