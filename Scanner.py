@@ -29,7 +29,7 @@ class Scanner:
                 }
 
     def addToken(self, _type: TokenType, literal: object = None) -> None:
-        text = self.source[self.start: self.current + 1]
+        text = self.source[self.start: self.current]
         self.tokens.append(Token(_type, text, literal, self.line))
 
     def isAtEnd(self):
@@ -50,7 +50,7 @@ class Scanner:
     def identifier(self) -> None:
         while Scanner.isAlphaNumeric(self.peek()):
             self.advance()
-        text: str = self.source[self.start: self.current + 1]
+        text: str = self.source[self.start: self.current]
         type: TokenType = self.keywords[text]
         if not type:
             type = TokenType.IDENTIFIER
@@ -64,7 +64,7 @@ class Scanner:
             self.advance()
             while Scanner.isDigit(self.peek()):
                 self.advance()
-        self.addToken(TokenType.NUMBER, int(self.source[self.start: self.current + 1]))
+        self.addToken(TokenType.NUMBER, int(self.source[self.start: self.current]))
 
     def string(self) -> None:
         while self.peek() != '"' and not self.isAtEnd():
@@ -75,7 +75,7 @@ class Scanner:
             Lox.error(self.line, "Unterminated string")
             return
         self.advance()
-        value: str = self.source[self.start + 1: self.current]
+        value: str = self.source[self.start + 1: self.current - 1]
         self.addToken(TokenType.STRING, value)
 
     def match(self, expected: str) -> bool:
@@ -104,19 +104,38 @@ class Scanner:
     def scanToken(self) -> None:
         c = self.advance()
         match c:
-            case TokenType.LEFT_PAREN | TokenType.RIGHT_PAREN | TokenType.LEFT_BRACE | TokenType.RIGHT_BRACE | TokenType.COMMA | TokenType.DOT | TokenType.MINUS | TokenType.PLUS | TokenType.SEMICOLON | TokenType.STAR: 
-                self.addToken(c)
+            case "(": 
+                self.addToken(TokenType.LEFT_PAREN)
+            case ")":
+                self.addToken(TokenType.RIGHT_PAREN)
+            case "{":
+                self.addToken(TokenType.LEFT_BRACE)
+            case "}":
+                self.addToken(TokenType.RIGHT_BRACE)
+            case ",":
+                self.addToken(TokenType.COMMA)
+            case ".":
+                self.addToken(TokenType.DOT)
+            case "-":
+                self.addToken(TokenType.MINUS)
+            case "+":
+                self.addToken(TokenType.PLUS)
+            case ";":
+                self.addToken(TokenType.MINUS)
+            case "*":
+                self.addToken(TokenType.PLUS)
+
             # Two-char tokens
-            case TokenType.BANG:
+            case "!":
                 self.addToken(TokenType.BANG_EQUAL if self.match('=') else TokenType.BANG)
-            case TokenType.EQUAL:
+            case "=":
                 self.addToken(TokenType.EQUAL_EQUAL if self.match('=') else TokenType.EQUAL)
-            case TokenType.LESS:
+            case "<":
                 self.addToken(TokenType.LESS_EQUAL if self.match('=') else TokenType.LESS)
-            case TokenType.GREATER:
+            case ">":
                 self.addToken(TokenType.GREATER_EQUAL if self.match('=') else TokenType.GREATER)
             # comments
-            case TokenType.SLASH:
+            case "/":
                 if self.match('/'):
                     while self.peek() != '\n' and not self.isAtEnd():
                         self.advance()

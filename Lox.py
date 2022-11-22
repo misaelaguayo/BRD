@@ -1,7 +1,5 @@
 import sys
 from TokenType import Token, TokenType
-from Parser import Parser
-from Scanner import Scanner
 from Expr import Expr
 from AstPrinter import AstPrinter
 
@@ -20,13 +18,13 @@ operator -> "==" | "!=" | "<" | "<=" | ">" | "+" | "-" | "*" | "/"
 
 unambiguous grammar
 ---------------------------------------------------------------
-primary -> equality
+expression -> equality
 equality -> comparison(("!="|"==") comparison)*
 comparison -> term((">"|">="|"<"|"<=")term)*
 term -> factor(("-"|"+")factor)*
-primary -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
-unary -> ("!"|"-") unary | primary
 factor -> unary(("/"|"*")unary)*
+unary -> ("!"|"-") unary | primary
+primary -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
 """
 
 class Lox:
@@ -46,6 +44,8 @@ class Lox:
                 Lox.report(token.line, f" at'{token.lexeme}'", message)
 
     def run(self, source: str) -> None:
+        from Parser import Parser
+        from Scanner import Scanner
         tokens = Scanner(source).scanTokens()
         parser: Parser = Parser(tokens)
         expression: Expr | None = parser.parse()
