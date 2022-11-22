@@ -26,6 +26,21 @@ class Parser:
         self.tokens: List[Token] = tokens
         self.current: int = 0
 
+    def parse(self) -> Expr | None:
+        try:
+            return self.expression()
+        except ParseError:
+            ...
+
+    def synchronize(self) -> None:
+        self.advance()
+        while not self.isAtEnd():
+            if self.previous().type == TokenType.SEMICOLON:
+                return
+            match self.peek().type:
+                case TokenType.CLASS | TokenType.FOR | TokenType.FUN | TokenType.IF | TokenType.PRINT | TokenType.RETURN | TokenType.VAR | TokenType.WHILE:
+                    return
+            self.advance()
     def consume(self, type: TokenType, message: str):
         if self.check(type):
             return self.advance()
@@ -44,7 +59,8 @@ class Parser:
             expr: Expr = self.expression()
             self.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.")
             return Grouping(expr)
-        return Literal(None)
+        else:
+            raise ParseError(self.peek(), "Expect expression.")
 
     def unary(self) -> Expr:
         if self.match([TokenType.BANG, TokenType.MINUS]):
@@ -114,4 +130,3 @@ class Parser:
 
     def expression(self) -> Expr:
         return self.equality()
-Parser([])

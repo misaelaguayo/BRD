@@ -1,5 +1,9 @@
 import sys
 from TokenType import Token, TokenType
+from Parser import Parser
+from Scanner import Scanner
+from Expr import Expr
+from AstPrinter import AstPrinter
 
 
 """
@@ -42,9 +46,12 @@ class Lox:
                 Lox.report(token.line, f" at'{token.lexeme}'", message)
 
     def run(self, source: str) -> None:
-        tokens = source.split(" ")
-        for token in tokens:
-            print(token)
+        tokens = Scanner(source).scanTokens()
+        parser: Parser = Parser(tokens)
+        expression: Expr | None = parser.parse()
+        if not expression:
+            return
+        print(AstPrinter().print(expression))
 
     def runPrompt(self):
         while True:

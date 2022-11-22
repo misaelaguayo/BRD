@@ -1,5 +1,5 @@
 from TokenType import *
-from typing import Any
+from typing import List
 from Lox import Lox
 
 class Scanner:
@@ -28,7 +28,7 @@ class Scanner:
                 "while": TokenType.WHILE
                 }
 
-    def addToken(self, _type: TokenType, literal: Any = None) -> None:
+    def addToken(self, _type: TokenType, literal: object = None) -> None:
         text = self.source[self.start: self.current + 1]
         self.tokens.append(Token(_type, text, literal, self.line))
 
@@ -143,7 +143,7 @@ class Scanner:
                     Lox.error(self.line, "Unexpected character.")
 
 
-    def scanTokens(self):
+    def scanTokens(self) -> List[Token]:
         while not self.isAtEnd():
             self.start = self.current
             self.scanToken()
