@@ -1,6 +1,7 @@
 from typing import List
 from TokenType import Token, TokenType
 from Expr import Expr, Binary, Unary, Literal, Grouping
+from Lox import Lox
 
 """
 unambiguous grammar
@@ -14,6 +15,12 @@ unary -> ("!"|"-") unary | primary
 primary -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
 """
 
+class ParseError(Exception):
+    def __init__(self, token: Token, message: str):
+        self.token = token
+        self.message = message
+        Lox.error(token=token, message=message)
+
 class Parser:
     def __init__(self, tokens: List[Token]):
         self.tokens: List[Token] = tokens
@@ -22,7 +29,7 @@ class Parser:
     def consume(self, type: TokenType, message: str):
         if self.check(type):
             return self.advance()
-        raise Exception(f"{self.peek()}{message}")
+        raise ParseError(self.peek(), message)
 
     def primary(self) -> Expr:
         if self.match([TokenType.FALSE]):

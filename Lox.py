@@ -1,4 +1,5 @@
 import sys
+from TokenType import Token, TokenType
 
 
 """
@@ -25,6 +26,21 @@ factor -> unary(("/"|"*")unary)*
 """
 
 class Lox:
+    @staticmethod
+    def report(line: int, where: str, message: str):
+        print(f"[line {line}] Error {where}: {message}")
+        # hadError = True
+
+    @staticmethod
+    def error(line: int = 0, message: str = "", token: Token | None = None):
+        if not token:
+            Lox.report(line, "", message)
+        else:
+            if token.type == TokenType.EOF:
+                Lox.report(token.line, " at end", message)
+            else:
+                Lox.report(token.line, f" at'{token.lexeme}'", message)
+
     def run(self, source: str) -> None:
         tokens = source.split(" ")
         for token in tokens:

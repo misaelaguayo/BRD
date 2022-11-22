@@ -1,5 +1,6 @@
 from TokenType import *
-from typing import Dict, Any
+from typing import Any
+from Lox import Lox
 
 class Scanner:
     def __init__(self, source: str):
@@ -71,8 +72,7 @@ class Scanner:
                 self.line += 1
             self.advance()
         if self.isAtEnd():
-            #TODO: Need to add error handling
-            print("unterminated string")
+            Lox.error(self.line, "Unterminated string")
             return
         self.advance()
         value: str = self.source[self.start + 1: self.current]
@@ -140,8 +140,7 @@ class Scanner:
                 elif Scanner.isAlpha(c):
                     self.identifier()
                 else:
-                    #TODO: Need to add error handling
-                    print("unexpected character")
+                    Lox.error(self.line, "Unexpected character.")
 
 
     def scanTokens(self):
