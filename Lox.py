@@ -1,8 +1,6 @@
 import sys
 from TokenType import Token, TokenType
 from Expr import Expr
-from AstPrinter import AstPrinter
-
 
 """
 Lox syntactic grammar:
@@ -57,12 +55,13 @@ class Lox:
     def run(self, source: str) -> None:
         from Parser import Parser
         from Scanner import Scanner
+        from Interpreter import Interpreter
         tokens = Scanner(source).scanTokens()
         parser: Parser = Parser(tokens)
         expression: Expr | None = parser.parse()
         if not expression:
             return
-        print(AstPrinter().print(expression))
+        Interpreter().interpret(expression)
 
     def runPrompt(self):
         while True:

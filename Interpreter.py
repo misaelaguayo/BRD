@@ -7,19 +7,19 @@ class Interpreter(Visitor):
     def stringify(object: object) -> str:
         if not object:
             return "nil"
-        if isinstance(object, int):
-            text: str = str(int)
+        if isinstance(object, float):
+            text: str = str(object)
             if text[-2:] == ".0":
                 text = text[0:-2]
             return text
         return str(object)
     def checkNumberOperands(self, operator: Token, left: object, right: object) -> None:
-        if isinstance(left, int) and isinstance(right, int):
+        if (isinstance(left, float) or isinstance(left, int)) and (isinstance(right, float) or isinstance(right, int)):
             return
         raise RunTimeError(operator, "Operands must be numbers")
 
     def checkNumberOperand(self, operator: Token, operand: object) -> None:
-        if isinstance(operand, int):
+        if isinstance(operand, float) or isinstance(operand, int):
             return
         raise RunTimeError(operator, "Operand must be a number")
 
@@ -57,7 +57,7 @@ class Interpreter(Visitor):
                 return not self.isTruthy(right)
             case TokenType.MINUS:
                 self.checkNumberOperand(expr.operator, right)
-                return -int(right)
+                return -float(right)
         return None
 
     def visitBinaryExpr(self, expr: Binary) -> object:
@@ -69,31 +69,31 @@ class Interpreter(Visitor):
         match expr.operator.type:
             case TokenType.MINUS:
                 self.checkNumberOperand(expr.operator, right)
-                return int(left) - int(right)
+                return float(left) - float(right)
             case TokenType.SLASH:
                 self.checkNumberOperands(expr.operator, left, right)
-                return int(left) / int(right)
+                return float(left) / float(right)
             case TokenType.STAR:
                 self.checkNumberOperands(expr.operator, left, right)
-                return int(left) * int(right)
+                return float(left) * float(right)
             case TokenType.PLUS:
-                if isinstance(left, int) and isinstance(right, int):
-                    return int(left) + int(right)
+                if (isinstance(left, float) or isinstance(left, int)) and (isinstance(right, float) or isinstance(right, int)):
+                    return float(left) + float(right)
                 if isinstance(left, str) and isinstance(right, str):
                     return str(left) + str(right)
                 raise RunTimeError(expr.operator, "Operands must be two numbers or two strings")
             case TokenType.GREATER:
                 self.checkNumberOperands(expr.operator, left, right)
-                return int(left) > int(right)
+                return float(left) > float(right)
             case TokenType.GREATER_EQUAL:
                 self.checkNumberOperands(expr.operator, left, right)
-                return int(left) >= int(right)
+                return float(left) >= float(right)
             case TokenType.LESS:
                 self.checkNumberOperands(expr.operator, left, right)
-                return int(left) + int(right)
+                return float(left) < float(right)
             case TokenType.LESS_EQUAL:
                 self.checkNumberOperands(expr.operator, left, right)
-                return int(left) <= int(right)
+                return float(left) <= float(right)
             case TokenType.BANG_EQUAL:
                 return not self.isEqual(left, right)
             case TokenType.EQUAL_EQUAL:

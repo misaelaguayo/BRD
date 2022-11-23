@@ -123,7 +123,7 @@ class Scanner:
             case ";":
                 self.addToken(TokenType.MINUS)
             case "*":
-                self.addToken(TokenType.PLUS)
+                self.addToken(TokenType.STAR)
 
             # Two-char tokens
             case "!":
