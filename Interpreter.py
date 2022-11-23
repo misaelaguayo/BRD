@@ -50,7 +50,7 @@ class Interpreter(Visitor):
 
     def visitUnaryExpr(self, expr: Unary) -> object:
         right: object = self.evaluate(expr.right)
-        assert right, "right somehow none"
+        assert right is not None, "right somehow none"
 
         match expr.operator.type:
             case TokenType.BANG:
@@ -64,7 +64,7 @@ class Interpreter(Visitor):
         left: object = self.evaluate(expr.left)
         right: object = self.evaluate(expr.right)
 
-        assert left and right, "left or right are somehow none"
+        assert left is not None and right is not None, "left or right are somehow none"
 
         match expr.operator.type:
             case TokenType.MINUS:
