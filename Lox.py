@@ -27,7 +27,18 @@ unary -> ("!"|"-") unary | primary
 primary -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
 """
 
+class RunTimeError(Exception):
+    def __init__(self, token: Token, message: str):
+        self.token = token
+        self.message = message
+        super().__init__(self.message)
+
 class Lox:
+    @staticmethod
+    def runtimeError(error: RunTimeError):
+        # hadRunTimeError = True
+        print(error)
+
     @staticmethod
     def report(line: int, where: str, message: str):
         print(f"[line {line}] Error {where}: {message}")
