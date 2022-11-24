@@ -3,7 +3,7 @@
 
 from abc import ABC, abstractmethod
 from TokenType import *
-from typing import Any
+from Expr import Expr
 
 class Stmt(ABC):
 	@abstractmethod

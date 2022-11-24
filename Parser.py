@@ -1,6 +1,7 @@
 from typing import List
 from TokenType import Token, TokenType
 from Expr import Expr, Binary, Unary, Literal, Grouping
+from Stmt import Stmt, Print, Expression
 from Lox import Lox
 
 """
@@ -27,11 +28,26 @@ class Parser:
         self.current: int = 0
         self.loxSingleton = lox
 
-    def parse(self) -> Expr | None:
-        try:
-            return self.expression()
-        except ParseError:
-            ...
+    def expressionStatement(self) -> Stmt:
+        expr: Expr = self.expression()
+        self.consume(TokenType.SEMICOLON, "Expect ';' after expression.")
+        return Expression(expr)
+
+    def printStatement(self) -> Stmt:
+        value: Expr = self.expression()
+        self.consume(TokenType.SEMICOLON, "Expect ';' after value.")
+        return Print(value)
+
+    def statement(self) -> Stmt:
+        if self.match([TokenType.PRINT]):
+            return self.printStatement()
+        return self.expressionStatement()
+
+    def parse(self) -> List[Stmt]:
+        statements: List[Stmt] = []
+        while not self.isAtEnd:
+            statements.append(self.statement())
+        return statements
 
     def synchronize(self) -> None:
         self.advance()

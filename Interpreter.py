@@ -1,10 +1,14 @@
-from Expr import Visitor, Literal, Grouping, Expr, Unary, Binary
+from Expr import Visitor as ExprVisitor, Literal, Grouping, Expr, Unary, Binary
+from Stmt import Visitor as StmtVisitor, Expression, Print, Stmt
 from TokenType import TokenType, Token
 from Lox import RunTimeError, Lox
+from typing import List
 
-class Interpreter(Visitor):
+class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by two visitor classes)
     def __init__(self, lox: Lox):
         self.loxSingleton = lox
+
+
 
     @staticmethod
     def stringify(object: object) -> str:
@@ -44,6 +48,17 @@ class Interpreter(Visitor):
     def evaluate(self, expr: Expr):
         return expr.accept(self)
 
+    # stmt visitors starts #
+    def visitExpressionStmt(self, stmt: Expression) -> None:
+        self.evaluate(stmt.expression)
+        return None
+    def visitPrintStmt(self, stmt: Print) -> None:
+        value: object = self.evaluate(stmt.expression)
+        print(self.stringify(value))
+        return None
+    # stmt visitors ends
+
+    # expr visitors starts
     @staticmethod
     def visitLiteralExpr(expr: Literal) -> object:
         return expr.value
@@ -104,10 +119,14 @@ class Interpreter(Visitor):
             case TokenType.EQUAL_EQUAL:
                 return self.isEqual(left,right)
         return None
+    # expr visitor ends
 
-    def interpret(self, expression: Expr) -> None:
+    def execute(self, stmt: Stmt) -> None:
+        stmt.accept(self)
+
+    def interpret(self, statements: List[Stmt]) -> None:
         try:
-            value: object = self.evaluate(expression)
-            print(self.stringify(value))
+            for statement in statements:
+                self.execute(statement)
         except RunTimeError as e:
             self.loxSingleton.runtimeError(e)

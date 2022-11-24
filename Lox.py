@@ -1,6 +1,7 @@
 import sys
 from TokenType import Token, TokenType
-from Expr import Expr
+from Stmt import Stmt
+from typing import List
 
 """
 Lox syntactic grammar:
@@ -59,10 +60,8 @@ class Lox:
         from Interpreter import Interpreter
         tokens = Scanner(source, self).scanTokens()
         parser: Parser = Parser(tokens, self)
-        expression: Expr | None = parser.parse()
-        if not expression:
-            return
-        Interpreter(self).interpret(expression)
+        statements: List[Stmt] = parser.parse()
+        Interpreter(self).interpret(statements)
 
     def runPrompt(self):
         while True:
@@ -72,7 +71,10 @@ class Lox:
             self.run(line)
 
     def runFile(self, path: str) -> None:
-        raise NotImplementedError("Has not been implemented yet!")
+        with open(path, 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                self.run(line)
 
     def __init__(self) -> None:
         self.hadError = False
