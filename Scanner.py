@@ -3,7 +3,7 @@ from typing import List
 from Lox import Lox
 
 class Scanner:
-    def __init__(self, source: str):
+    def __init__(self, source: str, lox: Lox):
         self.tokens = []
         self.source = source
         self.start = 0
@@ -27,6 +27,7 @@ class Scanner:
                 "var": TokenType.VAR,
                 "while": TokenType.WHILE
                 }
+        self.loxSingleton = lox
 
     def addToken(self, _type: TokenType, literal: object = None) -> None:
         text = self.source[self.start: self.current]
@@ -72,7 +73,7 @@ class Scanner:
                 self.line += 1
             self.advance()
         if self.isAtEnd():
-            Lox.error(self.line, "Unterminated string")
+            self.loxSingleton.error(self.line, "Unterminated string")
             return
         self.advance()
         value: str = self.source[self.start + 1: self.current - 1]
@@ -159,7 +160,7 @@ class Scanner:
                 elif Scanner.isAlpha(c):
                     self.identifier()
                 else:
-                    Lox.error(self.line, "Unexpected character.")
+                    self.loxSingleton.error(self.line, "Unexpected character.")
 
 
     def scanTokens(self) -> List[Token]:

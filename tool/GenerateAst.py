@@ -46,5 +46,6 @@ class GenerateAst:
         if len(sys.argv) < 2:
             raise Exception("Usage: python3 GenerateAst.py <output directory>")
         outputDir = sys.argv[1]
+        self.defineAst(outputDir, "Stmt", ["Expression| expression: Expr", "Print| expression: Expr"])
         self.defineAst(outputDir, "Expr", ["Binary| left: Expr,operator: Token,right: Expr", "Grouping| expression: Expr", "Literal| value: Any", "Unary| operator: Token,right: Expr"])
 GenerateAst()

@@ -16,6 +16,10 @@ operator -> "==" | "!=" | "<" | "<=" | ">" | "+" | "-" | "*" | "/"
 
 unambiguous grammar
 ---------------------------------------------------------------
+program -> statement* EOF ;
+statement -> exprStmt | printStmt
+exprStmt -> expression ";"
+printStmt -> "print" expression ";"
 expression -> equality
 equality -> comparison(("!="|"==") comparison)*
 comparison -> term((">"|">="|"<"|"<=")term)*
@@ -32,32 +36,29 @@ class RunTimeError(Exception):
         super().__init__(self.message)
 
 class Lox:
-    @staticmethod
-    def runtimeError(error: RunTimeError):
-        # hadRunTimeError = True
+    def runtimeError(self, error: RunTimeError):
+        self.hadRunTimeError = True
         print(error)
 
-    @staticmethod
-    def report(line: int, where: str, message: str):
+    def report(self, line: int, where: str, message: str):
         print(f"[line {line}] Error {where}: {message}")
-        # hadError = True
+        self.hadError = True
 
-    @staticmethod
-    def error(line: int = 0, message: str = "", token: Token | None = None):
+    def error(self, line: int = 0, message: str = "", token: Token | None = None):
         if not token:
-            Lox.report(line, "", message)
+            self.report(line, "", message)
         else:
             if token.type == TokenType.EOF:
-                Lox.report(token.line, " at end", message)
+                self.report(token.line, " at end", message)
             else:
-                Lox.report(token.line, f" at'{token.lexeme}'", message)
+                self.report(token.line, f" at'{token.lexeme}'", message)
 
     def run(self, source: str) -> None:
         from Parser import Parser
         from Scanner import Scanner
         from Interpreter import Interpreter
-        tokens = Scanner(source).scanTokens()
-        parser: Parser = Parser(tokens)
+        tokens = Scanner(source, self).scanTokens()
+        parser: Parser = Parser(tokens, self)
         expression: Expr | None = parser.parse()
         if not expression:
             return

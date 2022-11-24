@@ -16,15 +16,16 @@ primary -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
 """
 
 class ParseError(Exception):
-    def __init__(self, token: Token, message: str):
+    def __init__(self, token: Token, message: str, lox: Lox):
         self.token = token
         self.message = message
-        Lox.error(token=token, message=message)
+        lox.error(token=token, message=message)
 
 class Parser:
-    def __init__(self, tokens: List[Token]):
+    def __init__(self, tokens: List[Token], lox: Lox):
         self.tokens: List[Token] = tokens
         self.current: int = 0
+        self.loxSingleton = lox
 
     def parse(self) -> Expr | None:
         try:
@@ -44,7 +45,7 @@ class Parser:
     def consume(self, type: TokenType, message: str):
         if self.check(type):
             return self.advance()
-        raise ParseError(self.peek(), message)
+        raise ParseError(self.peek(), message, self.loxSingleton)
 
     def primary(self) -> Expr:
         if self.match([TokenType.FALSE]):
@@ -60,7 +61,7 @@ class Parser:
             self.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.")
             return Grouping(expr)
         else:
-            raise ParseError(self.peek(), "Expect expression.")
+            raise ParseError(self.peek(), "Expect expression.", self.loxSingleton)
 
     def unary(self) -> Expr:
         if self.match([TokenType.BANG, TokenType.MINUS]):

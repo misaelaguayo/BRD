@@ -72,6 +72,8 @@ class Interpreter(Visitor):
                 return float(left) - float(right)
             case TokenType.SLASH:
                 self.checkNumberOperands(expr.operator, left, right)
+                if not float(right):
+                    raise RunTimeError(expr.operator, "Division by zero error")
                 return float(left) / float(right)
             case TokenType.STAR:
                 self.checkNumberOperands(expr.operator, left, right)
@@ -79,7 +81,7 @@ class Interpreter(Visitor):
             case TokenType.PLUS:
                 if (isinstance(left, float) or isinstance(left, int)) and (isinstance(right, float) or isinstance(right, int)):
                     return float(left) + float(right)
-                if isinstance(left, str) and isinstance(right, str):
+                if isinstance(left, str) or isinstance(right, str):
                     return str(left) + str(right)
                 raise RunTimeError(expr.operator, "Operands must be two numbers or two strings")
             case TokenType.GREATER:
