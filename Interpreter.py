@@ -3,6 +3,9 @@ from TokenType import TokenType, Token
 from Lox import RunTimeError, Lox
 
 class Interpreter(Visitor):
+    def __init__(self, lox: Lox):
+        self.loxSingleton = lox
+
     @staticmethod
     def stringify(object: object) -> str:
         if not object:
@@ -107,4 +110,4 @@ class Interpreter(Visitor):
             value: object = self.evaluate(expression)
             print(self.stringify(value))
         except RunTimeError as e:
-            Lox.runtimeError(e)
+            self.loxSingleton.runtimeError(e)

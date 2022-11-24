@@ -62,7 +62,7 @@ class Lox:
         expression: Expr | None = parser.parse()
         if not expression:
             return
-        Interpreter().interpret(expression)
+        Interpreter(self).interpret(expression)
 
     def runPrompt(self):
         while True:
