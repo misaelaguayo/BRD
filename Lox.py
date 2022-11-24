@@ -52,12 +52,13 @@ class Lox:
             if token.type == TokenType.EOF:
                 self.report(token.line, " at end", message)
             else:
-                self.report(token.line, f" at'{token.lexeme}'", message)
+                self.report(token.line, f"at '{token.lexeme}' ", message)
 
     def run(self, source: str) -> None:
         from Parser import Parser
         from Scanner import Scanner
         from Interpreter import Interpreter
+
         tokens = Scanner(source, self).scanTokens()
         parser: Parser = Parser(tokens, self)
         statements: List[Stmt] = parser.parse()
@@ -72,9 +73,8 @@ class Lox:
 
     def runFile(self, path: str) -> None:
         with open(path, 'r') as f:
-            lines = f.readlines()
-            for line in lines:
-                self.run(line)
+            prog = f.read()
+            self.run(prog)
 
     def __init__(self) -> None:
         self.hadError = False
@@ -82,8 +82,9 @@ class Lox:
         if len(sys.argv) > 2:
             raise Exception("Usage:plox [script]")
         elif len(sys.argv) == 2:
-            self.runFile(sys.argv[0])
+            self.runFile(sys.argv[1])
         else:
             self.runPrompt();
 
-Lox()
+if __name__ == "__main__":
+    Lox()

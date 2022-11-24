@@ -45,7 +45,7 @@ class Parser:
 
     def parse(self) -> List[Stmt]:
         statements: List[Stmt] = []
-        while not self.isAtEnd:
+        while not self.isAtEnd():
             statements.append(self.statement())
         return statements
 

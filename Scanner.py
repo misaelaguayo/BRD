@@ -122,7 +122,7 @@ class Scanner:
             case "+":
                 self.addToken(TokenType.PLUS)
             case ";":
-                self.addToken(TokenType.MINUS)
+                self.addToken(TokenType.SEMICOLON)
             case "*":
                 self.addToken(TokenType.STAR)
 
