@@ -20,3 +20,9 @@ All you need is python to run the REPL and the interpreter
     - `python Lox.py` will run the REPL
 - Interpreter:
     - `python Lox.py <program.plox>` will run the interpreter for a plox program
+    
+Some example programs are provided on the functionality of the program. The language grammar is specified in `Lox.py`
+
+<img width="606" alt="Screen Shot 2022-11-25 at 3 26 33 PM" src="https://user-images.githubusercontent.com/29875928/204058328-01f43e41-7ead-4fe8-813b-5134452c7c98.png">
+
+
