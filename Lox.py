@@ -57,6 +57,7 @@ class Lox:
         Interpreter(self).interpret(statements)
 
     def runPrompt(self):
+        # TODO: prevent environment from being wiped out on each input
         while True:
             line = input("> ")
             if not line:

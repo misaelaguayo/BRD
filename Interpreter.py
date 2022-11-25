@@ -65,7 +65,7 @@ class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by
         return None
 
     def visitVariableExpr(self, expr: Variable):
-        return self.environment[expr.name]
+        return self.environment.get(expr.name)
     # stmt visitors ends
 
     # expr visitors starts
