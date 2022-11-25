@@ -1,10 +1,8 @@
 # Automatically generated using tool/GeneratedAst.py
-# ['Binary| left: Expr,operator: Token,right: Expr', 'Grouping| expression: Expr', 'Literal| value: Any', 'Unary| operator: Token,right: Expr']
+# ['Binary| left: Expr,operator: Token,right: Expr', 'Grouping| expression: Expr', 'Literal| value: object', 'Unary| operator: Token,right: Expr', 'Variable|name: Token']
 
-from abc import ABC, abstractmethod
 from TokenType import *
-from typing import Any
-
+from abc import ABC, abstractmethod
 class Expr(ABC):
 	@abstractmethod
 	def accept(self, visitor):
@@ -27,6 +25,10 @@ class Visitor(ABC):
 	def visitUnaryExpr(self, expr):
 		...
 
+	@abstractmethod
+	def visitVariableExpr(self, expr):
+		...
+
 class Binary(Expr):
 	def __init__(self, left: Expr,operator: Token,right: Expr):
 		self.left=left
@@ -44,7 +46,7 @@ class Grouping(Expr):
 
 
 class Literal(Expr):
-	def __init__(self, value: Any):
+	def __init__(self, value: object):
 		self.value=value
 	def accept(self, visitor):
 		return visitor.visitLiteralExpr(self)
@@ -56,5 +58,12 @@ class Unary(Expr):
 		self.right=right
 	def accept(self, visitor):
 		return visitor.visitUnaryExpr(self)
+
+
+class Variable(Expr):
+	def __init__(self, name: Token):
+		self.name=name
+	def accept(self, visitor):
+		return visitor.visitVariableExpr(self)
 
 

@@ -6,18 +6,10 @@ from typing import List
 """
 Lox syntactic grammar:
 
-ambiguous grammar
 ---------------------------------------------------------------
-epxression -> literal | unary | binary | grouping
-literal -> NUMBER | STRING | 'true' | 'false' | 'nil'
-grouping -> "(" expression ")"
-unary -> ("-" | "!") expression
-binary -> expression operator expression
-operator -> "==" | "!=" | "<" | "<=" | ">" | "+" | "-" | "*" | "/"
-
-unambiguous grammar
----------------------------------------------------------------
-program -> statement* EOF ;
+program -> statement* EOF
+declaration -> varDecl | statement
+varDecl -> "var" IDENTIFIER ( "=" expression )? ";"
 statement -> exprStmt | printStmt
 exprStmt -> expression ";"
 printStmt -> "print" expression ";"
@@ -27,7 +19,7 @@ comparison -> term((">"|">="|"<"|"<=")term)*
 term -> factor(("-"|"+")factor)*
 factor -> unary(("/"|"*")unary)*
 unary -> ("!"|"-") unary | primary
-primary -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
+primary -> NUMBER | STRING | IDENTIFIER | "true" | "false" | "nil" | "(" expression ")"
 """
 
 class RunTimeError(Exception):

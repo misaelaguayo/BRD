@@ -22,15 +22,27 @@ class GenerateAst:
             output.write("\t\t...\n")
             output.write("\n")
 
-    def defineAst(self, outputDir: str, baseName: str, types: List[str]) -> None:
+    def defineAst(self, outputDir: str, baseName: str, types: List[str], extraImports: List[str] = []) -> None:
+        """
+        Automatically generate AST classes
+
+        :param str outputDir: directory to write generated files to
+        :param str baseName: name given to base class which other classes inherit from
+        :param list[str] types: classes to be constructed which inherit from base name
+        :param list[str] extraImports: if a generated class relies on other generated classes, we need to import them here
+        :return: new python files to be used as types
+        :rtype: None
+        """
+
         path = outputDir + "/" + baseName + ".py"
         print(f"writing to {path}")
         with open(path, "w", encoding="utf-8") as output:
             output.write("# Automatically generated using tool/GeneratedAst.py\n")
             output.write(f"# {types}\n\n")
+            if extraImports:
+                for _import in extraImports:
+                    output.write(f"from {_import} import *\n")
             output.write("from abc import ABC, abstractmethod\n")
-            output.write("from TokenType import *\n")
-            output.write("from typing import Any\n\n")
             output.write(f"class {baseName}(ABC):\n")
             output.write(f"\t@abstractmethod\n")
             output.write(f"\tdef accept(self, visitor):\n")
@@ -46,6 +58,6 @@ class GenerateAst:
         if len(sys.argv) < 2:
             raise Exception("Usage: python3 GenerateAst.py <output directory>")
         outputDir = sys.argv[1]
-        self.defineAst(outputDir, "Stmt", ["Expression| expression: Expr", "Print| expression: Expr"])
-        self.defineAst(outputDir, "Expr", ["Binary| left: Expr,operator: Token,right: Expr", "Grouping| expression: Expr", "Literal| value: Any", "Unary| operator: Token,right: Expr"])
+        self.defineAst(outputDir, "Stmt", ["Expression| expression: Expr", "Print| expression: Expr", "Var| name: Token,initializer: Expr"], ["Expr", "TokenType"])
+        self.defineAst(outputDir, "Expr", ["Binary| left: Expr,operator: Token,right: Expr", "Grouping| expression: Expr", "Literal| value: object", "Unary| operator: Token,right: Expr", "Variable|name: Token"], ["TokenType"])
 GenerateAst()

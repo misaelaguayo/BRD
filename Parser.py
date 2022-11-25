@@ -1,20 +1,8 @@
 from typing import List
 from TokenType import Token, TokenType
-from Expr import Expr, Binary, Unary, Literal, Grouping
-from Stmt import Stmt, Print, Expression
+from Expr import Expr, Binary, Unary, Literal, Grouping, Variable
+from Stmt import Stmt, Print, Expression, Var
 from Lox import Lox
-
-"""
-unambiguous grammar
----------------------------------------------------------------
-expression -> equality
-equality -> comparison(("!="|"==") comparison)*
-comparison -> term((">"|">="|"<"|"<=")term)*
-term -> factor(("-"|"+")factor)*
-factor -> unary(("/"|"*")unary)*
-unary -> ("!"|"-") unary | primary
-primary -> NUMBER | STRING | "true" | "false" | "nil" | "(" expression ")"
-"""
 
 class ParseError(Exception):
     def __init__(self, token: Token, message: str, lox: Lox):
@@ -43,10 +31,33 @@ class Parser:
             return self.printStatement()
         return self.expressionStatement()
 
+    def varDeclaration(self) -> Stmt | None:
+        name: Token = self.consume(TokenType.IDENTIFIER, "Expect variable name.")
+        initializer = None
+
+        if self.match([TokenType.EQUAL]):
+            initializer = self.expression()
+        self.consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.")
+        if initializer:
+            return Var(name, initializer)
+        return None
+
+
+    def declaration(self) -> Stmt | None:
+        try:
+            if self.match([TokenType.VAR]):
+                return self.varDeclaration()
+            return self.statement()
+        except ParseError:
+            self.synchronize()
+            return None
+
     def parse(self) -> List[Stmt]:
         statements: List[Stmt] = []
         while not self.isAtEnd():
-            statements.append(self.statement())
+            dec = self.declaration()
+            if dec:
+                statements.append(dec)
         return statements
 
     def synchronize(self) -> None:
@@ -72,6 +83,8 @@ class Parser:
             return Literal(None)
         if self.match([TokenType.NUMBER, TokenType.STRING]):
             return Literal(self.previous().literal)
+        if self.match([TokenType.IDENTIFIER]):
+            return Variable(self.previous())
         if self.match([TokenType.LEFT_PAREN]):
             expr: Expr = self.expression()
             self.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.")

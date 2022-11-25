@@ -1,10 +1,9 @@
 # Automatically generated using tool/GeneratedAst.py
-# ['Expression| expression: Expr', 'Print| expression: Expr']
+# ['Expression| expression: Expr', 'Print| expression: Expr', 'Var| name: Token,initializer: Expr']
 
-from abc import ABC, abstractmethod
+from Expr import *
 from TokenType import *
-from Expr import Expr
-
+from abc import ABC, abstractmethod
 class Stmt(ABC):
 	@abstractmethod
 	def accept(self, visitor):
@@ -19,6 +18,10 @@ class Visitor(ABC):
 	def visitPrintStmt(self, stmt):
 		...
 
+	@abstractmethod
+	def visitVarStmt(self, stmt):
+		...
+
 class Expression(Stmt):
 	def __init__(self, expression: Expr):
 		self.expression=expression
@@ -31,5 +34,13 @@ class Print(Stmt):
 		self.expression=expression
 	def accept(self, visitor):
 		return visitor.visitPrintStmt(self)
+
+
+class Var(Stmt):
+	def __init__(self, name: Token,initializer: Expr):
+		self.name=name
+		self.initializer=initializer
+	def accept(self, visitor):
+		return visitor.visitVarStmt(self)
 
 
