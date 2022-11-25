@@ -1,6 +1,6 @@
 from typing import List
 from TokenType import Token, TokenType
-from Expr import Expr, Binary, Unary, Literal, Grouping, Variable
+from Expr import Expr, Binary, Unary, Literal, Grouping, Variable, Assign
 from Stmt import Stmt, Print, Expression, Var
 from Lox import Lox
 
@@ -158,5 +158,16 @@ class Parser:
             expr = Binary(expr, operator, right)
         return expr
 
+    def assignment(self) -> Expr:
+        expr: Expr = self.equality()
+        if self.match([TokenType.EQUAL]):
+            equals: Token = self.previous()
+            value: Expr = self.assignment()
+            if isinstance(expr, Variable):
+                name: Token = expr.name
+                return Assign(name, value)
+            self.loxSingleton.error(token=equals, message="Invalid assignment target.")
+        return expr
+
     def expression(self) -> Expr:
-        return self.equality()
+        return self.assignment()

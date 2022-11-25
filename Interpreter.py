@@ -1,5 +1,5 @@
 from Environment import Environment
-from Expr import Variable, Visitor as ExprVisitor, Literal, Grouping, Expr, Unary, Binary
+from Expr import Variable, Visitor as ExprVisitor, Literal, Grouping, Expr, Unary, Binary, Assign
 from Stmt import Var, Visitor as StmtVisitor, Expression, Print, Stmt
 from TokenType import TokenType, Token
 from Lox import RunTimeError, Lox
@@ -69,6 +69,11 @@ class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by
     # stmt visitors ends
 
     # expr visitors starts
+    def visitAssignExpr(self, expr: Assign):
+        value: object = self.evaluate(expr.value)
+        self.environment.assign(expr.name, value)
+        return value
+
     @staticmethod
     def visitLiteralExpr(expr: Literal) -> object:
         return expr.value
