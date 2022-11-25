@@ -1,5 +1,6 @@
-from Expr import Visitor as ExprVisitor, Literal, Grouping, Expr, Unary, Binary
-from Stmt import Visitor as StmtVisitor, Expression, Print, Stmt
+from Environment import Environment
+from Expr import Variable, Visitor as ExprVisitor, Literal, Grouping, Expr, Unary, Binary
+from Stmt import Var, Visitor as StmtVisitor, Expression, Print, Stmt
 from TokenType import TokenType, Token
 from Lox import RunTimeError, Lox
 from typing import List
@@ -7,8 +8,7 @@ from typing import List
 class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by two visitor classes)
     def __init__(self, lox: Lox):
         self.loxSingleton = lox
-
-
+        self.environment: Environment = Environment()
 
     @staticmethod
     def stringify(object: object) -> str:
@@ -56,6 +56,16 @@ class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by
         value: object = self.evaluate(stmt.expression)
         print(self.stringify(value))
         return None
+
+    def visitVarStmt(self, stmt: Var) -> None:
+        value: object = None
+        if stmt.initializer:
+            value = self.evaluate(stmt.initializer)
+        self.environment.define(stmt.name.lexeme, value)
+        return None
+
+    def visitVariableExpr(self, expr: Variable):
+        return self.environment[expr.name]
     # stmt visitors ends
 
     # expr visitors starts

@@ -76,7 +76,7 @@ class Lox:
         elif len(sys.argv) == 2:
             self.runFile(sys.argv[1])
         else:
-            self.runPrompt();
+            self.runPrompt()
 
 if __name__ == "__main__":
     Lox()

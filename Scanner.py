@@ -52,8 +52,9 @@ class Scanner:
         while Scanner.isAlphaNumeric(self.peek()):
             self.advance()
         text: str = self.source[self.start: self.current]
-        type: TokenType = self.keywords[text]
-        if not type:
+        if text in self.keywords:
+            type: TokenType = self.keywords[text]
+        else:
             type = TokenType.IDENTIFIER
         self.addToken(type)
 
