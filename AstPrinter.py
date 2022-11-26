@@ -2,6 +2,7 @@ from Expr import Expr, Literal, Unary, Binary, Visitor, Grouping
 from TokenType import Token, TokenType
 from typing import List
 
+
 class AstPrinter(Visitor):
     def print(self, expr):
         return expr.accept(self)
@@ -26,6 +27,7 @@ class AstPrinter(Visitor):
 
     def visitUnaryExpr(self, expr: Unary) -> str:
         return self.parenthesize(expr.operator.lexeme, [expr.right])
+
 
 if __name__ == "__main__":
     literal123: Literal = Literal(123)

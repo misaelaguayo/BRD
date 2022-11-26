@@ -2,8 +2,9 @@ from typing import Dict
 from TokenType import Token
 from Lox import RunTimeError
 
+
 class Environment:
-    def __init__(self, enclosing = None):
+    def __init__(self, enclosing=None):
         self.values: Dict[str, object] = {}
         self.enclosing: Environment = enclosing
 

@@ -4,11 +4,13 @@ from Expr import Expr, Binary, Unary, Literal, Grouping, Variable, Assign
 from Stmt import Block, Stmt, Print, Expression, Var
 from Lox import Lox
 
+
 class ParseError(Exception):
     def __init__(self, token: Token, message: str, lox: Lox):
         self.token = token
         self.message = message
         lox.error(token=token, message=message)
+
 
 class Parser:
     def __init__(self, tokens: List[Token], lox: Lox):
@@ -52,7 +54,6 @@ class Parser:
             return Var(name, initializer)
         return None
 
-
     def declaration(self) -> Stmt | None:
         try:
             if self.match([TokenType.VAR]):
@@ -79,6 +80,7 @@ class Parser:
                 case TokenType.CLASS | TokenType.FOR | TokenType.FUN | TokenType.IF | TokenType.PRINT | TokenType.RETURN | TokenType.VAR | TokenType.WHILE:
                     return
             self.advance()
+
     def consume(self, type: TokenType, message: str):
         if self.check(type):
             return self.advance()
@@ -128,7 +130,14 @@ class Parser:
 
     def comparison(self) -> Expr:
         expr: Expr = self.term()
-        while self.match([TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL]):
+        while self.match(
+            [
+                TokenType.GREATER,
+                TokenType.GREATER_EQUAL,
+                TokenType.LESS,
+                TokenType.LESS_EQUAL,
+            ]
+        ):
             operator: Token = self.previous()
             right: Expr = self.term()
             expr = Binary(expr, operator, right)

@@ -1,11 +1,21 @@
 from Environment import Environment
-from Expr import Variable, Visitor as ExprVisitor, Literal, Grouping, Expr, Unary, Binary, Assign
+from Expr import (
+    Variable,
+    Visitor as ExprVisitor,
+    Literal,
+    Grouping,
+    Expr,
+    Unary,
+    Binary,
+    Assign,
+)
 from Stmt import Block, Var, Visitor as StmtVisitor, Expression, Print, Stmt
 from TokenType import TokenType, Token
 from Lox import RunTimeError, Lox
 from typing import List
 
-class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by two visitor classes)
+
+class Interpreter(ExprVisitor, StmtVisitor):  # type: ignore (pyright confused by two visitor classes)
     def __init__(self, lox: Lox):
         self.loxSingleton = lox
         self.environment: Environment = Environment()
@@ -20,8 +30,11 @@ class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by
                 text = text[0:-2]
             return text
         return str(object)
+
     def checkNumberOperands(self, operator: Token, left: object, right: object) -> None:
-        if (isinstance(left, float) or isinstance(left, int)) and (isinstance(right, float) or isinstance(right, int)):
+        if (isinstance(left, float) or isinstance(left, int)) and (
+            isinstance(right, float) or isinstance(right, int)
+        ):
             return
         raise RunTimeError(operator, "Operands must be numbers")
 
@@ -57,7 +70,6 @@ class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by
         finally:
             self.environment = previous
 
-
     # stmt visitors starts #
     def visitBlockStmt(self, stmt: Block) -> None:
         self.executeBlock(stmt.statements, Environment(self.environment))
@@ -66,6 +78,7 @@ class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by
     def visitExpressionStmt(self, stmt: Expression) -> None:
         self.evaluate(stmt.expression)
         return None
+
     def visitPrintStmt(self, stmt: Print) -> None:
         value: object = self.evaluate(stmt.expression)
         print(self.stringify(value))
@@ -80,6 +93,7 @@ class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by
 
     def visitVariableExpr(self, expr: Variable):
         return self.environment.get(expr.name)
+
     # stmt visitors ends
 
     # expr visitors starts
@@ -126,11 +140,15 @@ class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by
                 self.checkNumberOperands(expr.operator, left, right)
                 return float(left) * float(right)
             case TokenType.PLUS:
-                if (isinstance(left, float) or isinstance(left, int)) and (isinstance(right, float) or isinstance(right, int)):
+                if (isinstance(left, float) or isinstance(left, int)) and (
+                    isinstance(right, float) or isinstance(right, int)
+                ):
                     return float(left) + float(right)
                 if isinstance(left, str) or isinstance(right, str):
                     return str(left) + str(right)
-                raise RunTimeError(expr.operator, "Operands must be two numbers or two strings")
+                raise RunTimeError(
+                    expr.operator, "Operands must be two numbers or two strings"
+                )
             case TokenType.GREATER:
                 self.checkNumberOperands(expr.operator, left, right)
                 return float(left) > float(right)
@@ -146,8 +164,9 @@ class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by
             case TokenType.BANG_EQUAL:
                 return not self.isEqual(left, right)
             case TokenType.EQUAL_EQUAL:
-                return self.isEqual(left,right)
+                return self.isEqual(left, right)
         return None
+
     # expr visitor ends
 
     def execute(self, stmt: Stmt) -> None:

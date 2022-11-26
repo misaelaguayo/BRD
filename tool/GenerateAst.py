@@ -1,6 +1,7 @@
 import sys
 from typing import List
 
+
 class GenerateAst:
     def defineType(self, output, baseName: str, className: str, fieldList: str) -> None:
         output.write(f"class {className}({baseName}):\n")
@@ -18,11 +19,19 @@ class GenerateAst:
         for type in types:
             typeName: str = type.split("|")[0].strip()
             output.write("\t@abstractmethod\n")
-            output.write(f"\tdef visit{typeName}{baseName}(self, {baseName.lower()}):\n")
+            output.write(
+                f"\tdef visit{typeName}{baseName}(self, {baseName.lower()}):\n"
+            )
             output.write("\t\t...\n")
             output.write("\n")
 
-    def defineAst(self, outputDir: str, baseName: str, types: List[str], extraImports: List[str] = []) -> None:
+    def defineAst(
+        self,
+        outputDir: str,
+        baseName: str,
+        types: List[str],
+        extraImports: List[str] = [],
+    ) -> None:
         """
         Automatically generate AST classes
 
@@ -59,16 +68,30 @@ class GenerateAst:
         if len(sys.argv) < 2:
             raise Exception("Usage: python3 GenerateAst.py <output directory>")
         outputDir = sys.argv[1]
-        self.defineAst(outputDir, "Stmt", 
-                                    ["Block| statements: List[Stmt]", 
-                                    "Expression| expression: Expr", 
-                                    "Print| expression: Expr", 
-                                    "Var| name: Token,initializer: Expr"], ["Expr", "TokenType"])
-        self.defineAst(outputDir, "Expr", 
-                                    ["Assign|name: Token,value: Expr", 
-                                    "Binary| left: Expr,operator: Token,right: Expr", 
-                                    "Grouping| expression: Expr", 
-                                    "Literal| value: object", 
-                                    "Unary| operator: Token,right: Expr", 
-                                    "Variable|name: Token"], ["TokenType"])
+        self.defineAst(
+            outputDir,
+            "Stmt",
+            [
+                "Block| statements: List[Stmt]",
+                "Expression| expression: Expr",
+                "Print| expression: Expr",
+                "Var| name: Token,initializer: Expr",
+            ],
+            ["Expr", "TokenType"],
+        )
+        self.defineAst(
+            outputDir,
+            "Expr",
+            [
+                "Assign|name: Token,value: Expr",
+                "Binary| left: Expr,operator: Token,right: Expr",
+                "Grouping| expression: Expr",
+                "Literal| value: object",
+                "Unary| operator: Token,right: Expr",
+                "Variable|name: Token",
+            ],
+            ["TokenType"],
+        )
+
+
 GenerateAst()

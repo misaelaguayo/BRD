@@ -24,11 +24,13 @@ unary -> ("!"|"-") unary | primary
 primary -> NUMBER | STRING | IDENTIFIER | "true" | "false" | "nil" | "(" expression ")"
 """
 
+
 class RunTimeError(Exception):
     def __init__(self, token: Token, message: str):
         self.token = token
         self.message = message
         super().__init__(self.message)
+
 
 class Lox:
     def runtimeError(self, error: RunTimeError):
@@ -52,6 +54,7 @@ class Lox:
         from Parser import Parser
         from Scanner import Scanner
         from Interpreter import Interpreter
+
         tokens = Scanner(source, self).scanTokens()
         parser: Parser = Parser(tokens, self)
         statements: List[Stmt] = parser.parse()
@@ -66,7 +69,7 @@ class Lox:
             self.run(line)
 
     def runFile(self, path: str) -> None:
-        with open(path, 'r') as f:
+        with open(path, "r") as f:
             prog = f.read()
             self.run(prog)
 
@@ -79,6 +82,7 @@ class Lox:
             self.runFile(sys.argv[1])
         else:
             self.runPrompt()
+
 
 if __name__ == "__main__":
     Lox()

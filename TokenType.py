@@ -1,6 +1,7 @@
 from enum import StrEnum, auto
 from typing import Any
 
+
 class TokenType(StrEnum):
     # Single-character tokens
     LEFT_PAREN = "("
@@ -49,6 +50,7 @@ class TokenType(StrEnum):
     WHILE = auto()
     EOF = auto()
 
+
 class Token:
     def __init__(self, type: TokenType, lexeme: str, literal: Any, line: int):
         self.type = type
@@ -58,4 +60,3 @@ class Token:
 
     def toString(self) -> str:
         return self.type + " " + self.lexeme + " " + self.literal
-
