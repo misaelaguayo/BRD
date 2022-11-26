@@ -10,10 +10,12 @@ Lox syntactic grammar:
 program -> statement* EOF
 declaration -> varDecl | statement
 varDecl -> "var" IDENTIFIER ( "=" expression )? ";"
-statement -> exprStmt | printStmt
+statement -> exprStmt | printStmt | block
+block -> "{" declaration* "}"
 exprStmt -> expression ";"
 printStmt -> "print" expression ";"
-expression -> equality
+expression -> assignment
+assignment -> IDENTIFIER "=" assignment | equality
 equality -> comparison(("!="|"==") comparison)*
 comparison -> term((">"|">="|"<"|"<=")term)*
 term -> factor(("-"|"+")factor)*
@@ -50,7 +52,6 @@ class Lox:
         from Parser import Parser
         from Scanner import Scanner
         from Interpreter import Interpreter
-
         tokens = Scanner(source, self).scanTokens()
         parser: Parser = Parser(tokens, self)
         statements: List[Stmt] = parser.parse()

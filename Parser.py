@@ -1,7 +1,7 @@
 from typing import List
 from TokenType import Token, TokenType
 from Expr import Expr, Binary, Unary, Literal, Grouping, Variable, Assign
-from Stmt import Stmt, Print, Expression, Var
+from Stmt import Block, Stmt, Print, Expression, Var
 from Lox import Lox
 
 class ParseError(Exception):
@@ -26,9 +26,19 @@ class Parser:
         self.consume(TokenType.SEMICOLON, "Expect ';' after value.")
         return Print(value)
 
+    def block(self) -> List[Stmt]:
+        statements: List[Stmt] = []
+
+        while not self.check(TokenType.RIGHT_BRACE) and not self.isAtEnd():
+            statements.append(self.declaration())
+        self.consume(TokenType.RIGHT_BRACE, "Expect '}' after block.")
+        return statements
+
     def statement(self) -> Stmt:
         if self.match([TokenType.PRINT]):
             return self.printStatement()
+        if self.match([TokenType.LEFT_BRACE]):
+            return Block(self.block())
         return self.expressionStatement()
 
     def varDeclaration(self) -> Stmt | None:

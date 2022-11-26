@@ -1,7 +1,7 @@
-from enum import Enum, auto
+from enum import StrEnum, auto
 from typing import Any
 
-class TokenType(Enum):
+class TokenType(StrEnum):
     # Single-character tokens
     LEFT_PAREN = "("
     RIGHT_PAREN = ")"

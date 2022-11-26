@@ -3,6 +3,7 @@
 
 from TokenType import *
 from abc import ABC, abstractmethod
+from typing import List
 class Expr(ABC):
 	@abstractmethod
 	def accept(self, visitor):

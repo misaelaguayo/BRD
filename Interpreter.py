@@ -1,6 +1,6 @@
 from Environment import Environment
 from Expr import Variable, Visitor as ExprVisitor, Literal, Grouping, Expr, Unary, Binary, Assign
-from Stmt import Var, Visitor as StmtVisitor, Expression, Print, Stmt
+from Stmt import Block, Var, Visitor as StmtVisitor, Expression, Print, Stmt
 from TokenType import TokenType, Token
 from Lox import RunTimeError, Lox
 from typing import List
@@ -48,7 +48,21 @@ class Interpreter(ExprVisitor, StmtVisitor): # type: ignore (pyright confused by
     def evaluate(self, expr: Expr):
         return expr.accept(self)
 
+    def executeBlock(self, statements: List[Stmt], environment: Environment):
+        previous: Environment = self.environment
+        try:
+            self.environment = environment
+            for statement in statements:
+                self.execute(statement)
+        finally:
+            self.environment = previous
+
+
     # stmt visitors starts #
+    def visitBlockStmt(self, stmt: Block) -> None:
+        self.executeBlock(stmt.statements, Environment(self.environment))
+        return None
+
     def visitExpressionStmt(self, stmt: Expression) -> None:
         self.evaluate(stmt.expression)
         return None
