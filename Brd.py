@@ -4,7 +4,7 @@ from Stmt import Stmt
 from typing import List
 
 """
-Lox syntactic grammar:
+Brd syntactic grammar:
 
 ---------------------------------------------------------------
 program -> statement* EOF
@@ -40,7 +40,7 @@ class RunTimeError(Exception):
         super().__init__(self.message)
 
 
-class Lox:
+class Brd:
     def runtimeError(self, error: RunTimeError):
         self.hadRunTimeError = True
         print(error)
@@ -85,7 +85,7 @@ class Lox:
         self.hadError = False
 
         if len(sys.argv) > 2:
-            raise Exception("Usage:plox [script]")
+            raise Exception("Usage:Brd.py [script]")
         elif len(sys.argv) == 2:
             self.runFile(sys.argv[1])
         else:
@@ -93,4 +93,4 @@ class Lox:
 
 
 if __name__ == "__main__":
-    Lox()
+    Brd()

@@ -12,13 +12,13 @@ from Expr import (
 )
 from Stmt import Block, If, Var, Visitor as StmtVisitor, Expression, Print, Stmt, While
 from TokenType import TokenType, Token
-from Lox import RunTimeError, Lox
+from Brd import RunTimeError, Brd
 from typing import List
 
 
 class Interpreter(ExprVisitor, StmtVisitor):  # type: ignore (pyright confused by two visitor classes)
-    def __init__(self, lox: Lox):
-        self.loxSingleton = lox
+    def __init__(self, brd: Brd):
+        self.brdSingleton = brd
         self.environment: Environment = Environment()
 
     @staticmethod
@@ -200,4 +200,4 @@ class Interpreter(ExprVisitor, StmtVisitor):  # type: ignore (pyright confused b
             for statement in statements:
                 self.execute(statement)
         except RunTimeError as e:
-            self.loxSingleton.runtimeError(e)
+            self.brdSingleton.runtimeError(e)

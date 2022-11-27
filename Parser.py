@@ -2,21 +2,21 @@ from typing import List
 from TokenType import Token, TokenType
 from Expr import Expr, Binary, Logical, Unary, Literal, Grouping, Variable, Assign
 from Stmt import Block, Stmt, Print, Expression, Var, If, While
-from Lox import Lox
+from Brd import Brd
 
 
 class ParseError(Exception):
-    def __init__(self, token: Token, message: str, lox: Lox):
+    def __init__(self, token: Token, message: str, brd: Brd):
         self.token = token
         self.message = message
-        lox.error(token=token, message=message)
+        brd.error(token=token, message=message)
 
 
 class Parser:
-    def __init__(self, tokens: List[Token], lox: Lox):
+    def __init__(self, tokens: List[Token], brd: Brd):
         self.tokens: List[Token] = tokens
         self.current: int = 0
-        self.loxSingleton = lox
+        self.brdSingleton = brd
 
     def expressionStatement(self) -> Stmt:
         expr: Expr = self.expression()
@@ -107,7 +107,7 @@ class Parser:
     def consume(self, type: TokenType, message: str):
         if self.check(type):
             return self.advance()
-        raise ParseError(self.peek(), message, self.loxSingleton)
+        raise ParseError(self.peek(), message, self.brdSingleton)
 
     def primary(self) -> Expr:
         if self.match([TokenType.FALSE]):
@@ -125,7 +125,7 @@ class Parser:
             self.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.")
             return Grouping(expr)
         else:
-            raise ParseError(self.peek(), "Expect expression.", self.loxSingleton)
+            raise ParseError(self.peek(), "Expect expression.", self.brdSingleton)
 
     def unary(self) -> Expr:
         if self.match([TokenType.BANG, TokenType.MINUS]):
@@ -224,7 +224,7 @@ class Parser:
             if isinstance(expr, Variable):
                 name: Token = expr.name
                 return Assign(name, value)
-            self.loxSingleton.error(token=equals, message="Invalid assignment target.")
+            self.brdSingleton.error(token=equals, message="Invalid assignment target.")
         return expr
 
     def expression(self) -> Expr:

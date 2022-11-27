@@ -1,10 +1,10 @@
 from TokenType import *
 from typing import List
-from Lox import Lox
+from Brd import Brd
 
 
 class Scanner:
-    def __init__(self, source: str, lox: Lox):
+    def __init__(self, source: str, brd: Brd):
         self.tokens = []
         self.source = source
         self.start = 0
@@ -28,7 +28,7 @@ class Scanner:
             "var": TokenType.VAR,
             "while": TokenType.WHILE,
         }
-        self.loxSingleton = lox
+        self.brdSingleton = brd
 
     def addToken(self, _type: TokenType, literal: object = None) -> None:
         text = self.source[self.start : self.current]
@@ -75,7 +75,7 @@ class Scanner:
                 self.line += 1
             self.advance()
         if self.isAtEnd():
-            self.loxSingleton.error(self.line, "Unterminated string")
+            self.brdSingleton.error(self.line, "Unterminated string")
             return
         self.advance()
         value: str = self.source[self.start + 1 : self.current - 1]
@@ -173,7 +173,7 @@ class Scanner:
                 elif Scanner.isAlpha(c):
                     self.identifier()
                 else:
-                    self.loxSingleton.error(self.line, "Unexpected character.")
+                    self.brdSingleton.error(self.line, "Unexpected character.")
 
     def scanTokens(self) -> List[Token]:
         while not self.isAtEnd():
