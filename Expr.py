@@ -1,5 +1,5 @@
 # Automatically generated using tool/GeneratedAst.py
-# ['Assign|name: Token,value: Expr', 'Binary| left: Expr,operator: Token,right: Expr', 'Grouping| expression: Expr', 'Literal| value: object', 'Unary| operator: Token,right: Expr', 'Variable|name: Token']
+# ['Assign-name: Token,value: Expr', 'Binary- left: Expr,operator: Token,right: Expr', 'Grouping- expression: Expr', 'Literal- value: object', 'Logical- left: Expr,operator: Token,right: Expr', 'Unary- operator: Token,right: Expr', 'Variable-name: Token']
 
 from TokenType import *
 from abc import ABC, abstractmethod
@@ -27,6 +27,10 @@ class Visitor(ABC):
 
     @abstractmethod
     def visitLiteralExpr(self, expr):
+        ...
+
+    @abstractmethod
+    def visitLogicalExpr(self, expr):
         ...
 
     @abstractmethod
@@ -71,6 +75,16 @@ class Literal(Expr):
 
     def accept(self, visitor):
         return visitor.visitLiteralExpr(self)
+
+
+class Logical(Expr):
+    def __init__(self, left: Expr, operator: Token, right: Expr):
+        self.left = left
+        self.operator = operator
+        self.right = right
+
+    def accept(self, visitor):
+        return visitor.visitLogicalExpr(self)
 
 
 class Unary(Expr):

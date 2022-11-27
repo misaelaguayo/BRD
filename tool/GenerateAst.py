@@ -17,7 +17,7 @@ class GenerateAst:
     def defineVisitor(self, output, baseName: str, types: List[str]):
         output.write(f"class Visitor(ABC):\n")
         for type in types:
-            typeName: str = type.split("|")[0].strip()
+            typeName: str = type.split("-")[0].strip()
             output.write("\t@abstractmethod\n")
             output.write(
                 f"\tdef visit{typeName}{baseName}(self, {baseName.lower()}):\n"
@@ -60,8 +60,8 @@ class GenerateAst:
             self.defineVisitor(output, baseName, types)
 
             for type in types:
-                className = type.split("|")[0].strip()
-                fields = type.split("|")[1].strip()
+                className = type.split("-")[0].strip()
+                fields = type.split("-")[1].strip()
                 self.defineType(output, baseName, className, fields)
 
     def __init__(self):
@@ -72,10 +72,11 @@ class GenerateAst:
             outputDir,
             "Stmt",
             [
-                "Block| statements: List[Stmt]",
-                "Expression| expression: Expr",
-                "Print| expression: Expr",
-                "Var| name: Token,initializer: Expr",
+                "Block- statements: List[Stmt]",
+                "Expression- expression: Expr",
+                "If- condition: Expr,thenBranch: Stmt,elseBranch: Stmt|None",
+                "Print- expression: Expr",
+                "Var- name: Token,initializer: Expr",
             ],
             ["Expr", "TokenType"],
         )
@@ -83,12 +84,13 @@ class GenerateAst:
             outputDir,
             "Expr",
             [
-                "Assign|name: Token,value: Expr",
-                "Binary| left: Expr,operator: Token,right: Expr",
-                "Grouping| expression: Expr",
-                "Literal| value: object",
-                "Unary| operator: Token,right: Expr",
-                "Variable|name: Token",
+                "Assign-name: Token,value: Expr",
+                "Binary- left: Expr,operator: Token,right: Expr",
+                "Grouping- expression: Expr",
+                "Literal- value: object",
+                "Logical- left: Expr,operator: Token,right: Expr",
+                "Unary- operator: Token,right: Expr",
+                "Variable-name: Token",
             ],
             ["TokenType"],
         )

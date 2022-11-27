@@ -1,5 +1,5 @@
 # Automatically generated using tool/GeneratedAst.py
-# ['Block| statements: List[Stmt]', 'Expression| expression: Expr', 'Print| expression: Expr', 'Var| name: Token,initializer: Expr']
+# ['Block- statements: List[Stmt]', 'Expression- expression: Expr', 'If- condition: Expr,thenBranch: Stmt,elseBranch: Stmt|None', 'Print- expression: Expr', 'Var- name: Token,initializer: Expr']
 
 from Expr import *
 from TokenType import *
@@ -20,6 +20,10 @@ class Visitor(ABC):
 
     @abstractmethod
     def visitExpressionStmt(self, stmt):
+        ...
+
+    @abstractmethod
+    def visitIfStmt(self, stmt):
         ...
 
     @abstractmethod
@@ -45,6 +49,16 @@ class Expression(Stmt):
 
     def accept(self, visitor):
         return visitor.visitExpressionStmt(self)
+
+
+class If(Stmt):
+    def __init__(self, condition: Expr, thenBranch: Stmt, elseBranch: Stmt | None):
+        self.condition = condition
+        self.thenBranch = thenBranch
+        self.elseBranch = elseBranch
+
+    def accept(self, visitor):
+        return visitor.visitIfStmt(self)
 
 
 class Print(Stmt):

@@ -1,5 +1,6 @@
 from Environment import Environment
 from Expr import (
+    Logical,
     Variable,
     Visitor as ExprVisitor,
     Literal,
@@ -9,7 +10,7 @@ from Expr import (
     Binary,
     Assign,
 )
-from Stmt import Block, Var, Visitor as StmtVisitor, Expression, Print, Stmt
+from Stmt import Block, If, Var, Visitor as StmtVisitor, Expression, Print, Stmt
 from TokenType import TokenType, Token
 from Lox import RunTimeError, Lox
 from typing import List
@@ -71,6 +72,24 @@ class Interpreter(ExprVisitor, StmtVisitor):  # type: ignore (pyright confused b
             self.environment = previous
 
     # stmt visitors starts #
+    def visitLogicalExpr(self, expr: Logical):
+        left: object = self.evaluate(expr.left)
+        if expr.operator.type == TokenType.OR:
+            if self.isTruthy(left):
+                return left
+        else:
+            if not self.isTruthy(left):
+                return left
+        return self.evaluate(expr.right)
+
+
+    def visitIfStmt(self, stmt: If) -> None:
+        if self.isTruthy(self.evaluate(stmt.condition)):
+            self.execute(stmt.thenBranch)
+        elif stmt.elseBranch:
+            self.execute(stmt.elseBranch)
+        return None
+
     def visitBlockStmt(self, stmt: Block) -> None:
         self.executeBlock(stmt.statements, Environment(self.environment))
         return None
