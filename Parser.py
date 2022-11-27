@@ -1,7 +1,7 @@
 from typing import List
 from TokenType import Token, TokenType
 from Expr import Expr, Binary, Logical, Unary, Literal, Grouping, Variable, Assign
-from Stmt import Block, Stmt, Print, Expression, Var, If
+from Stmt import Block, Stmt, Print, Expression, Var, If, While
 from Lox import Lox
 
 
@@ -34,6 +34,14 @@ class Parser:
             elseBranch = self.statement()
         return If(condition, thenBranch, elseBranch)
 
+    def whileStatement(self) -> Stmt:
+        self.consume(TokenType.LEFT_PAREN, "Expect '(' after 'while'.")
+        condition: Expr = self.expression()
+        self.consume(TokenType.RIGHT_PAREN, "Expect ')' after condition.")
+        body: Stmt = self.statement()
+
+        return While(condition, body)
+
     def printStatement(self) -> Stmt:
         value: Expr = self.expression()
         self.consume(TokenType.SEMICOLON, "Expect ';' after value.")
@@ -52,6 +60,8 @@ class Parser:
             return self.ifStatement()
         if self.match([TokenType.PRINT]):
             return self.printStatement()
+        if self.match([TokenType.WHILE]):
+            return self.whileStatement()
         if self.match([TokenType.LEFT_BRACE]):
             return Block(self.block())
         return self.expressionStatement()

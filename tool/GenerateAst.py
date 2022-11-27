@@ -76,6 +76,7 @@ class GenerateAst:
                 "Expression- expression: Expr",
                 "If- condition: Expr,thenBranch: Stmt,elseBranch: Stmt|None",
                 "Print- expression: Expr",
+                "While- condition: Expr,body: Stmt",
                 "Var- name: Token,initializer: Expr",
             ],
             ["Expr", "TokenType"],

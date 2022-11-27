@@ -21,7 +21,7 @@ class Environment:
             self.values[name.lexeme] = value
             return
         if self.enclosing:
-            self.enclosing.assign(name, value)
+            return self.enclosing.assign(name, value)
         raise RunTimeError(name, f"Undefined variable '{name.lexeme}'.")
 
     def define(self, name: str, value: object) -> None:

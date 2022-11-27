@@ -1,5 +1,5 @@
 # Automatically generated using tool/GeneratedAst.py
-# ['Block- statements: List[Stmt]', 'Expression- expression: Expr', 'If- condition: Expr,thenBranch: Stmt,elseBranch: Stmt|None', 'Print- expression: Expr', 'Var- name: Token,initializer: Expr']
+# ['Block- statements: List[Stmt]', 'Expression- expression: Expr', 'If- condition: Expr,thenBranch: Stmt,elseBranch: Stmt|None', 'Print- expression: Expr', 'While- condition: Expr,body: Stmt', 'Var- name: Token,initializer: Expr']
 
 from Expr import *
 from TokenType import *
@@ -28,6 +28,10 @@ class Visitor(ABC):
 
     @abstractmethod
     def visitPrintStmt(self, stmt):
+        ...
+
+    @abstractmethod
+    def visitWhileStmt(self, stmt):
         ...
 
     @abstractmethod
@@ -67,6 +71,15 @@ class Print(Stmt):
 
     def accept(self, visitor):
         return visitor.visitPrintStmt(self)
+
+
+class While(Stmt):
+    def __init__(self, condition: Expr, body: Stmt):
+        self.condition = condition
+        self.body = body
+
+    def accept(self, visitor):
+        return visitor.visitWhileStmt(self)
 
 
 class Var(Stmt):
