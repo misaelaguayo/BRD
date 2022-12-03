@@ -1,3 +1,4 @@
+[![tests](https://github.com/misaelaguayo/BRD/actions/workflows/python-app.yml/badge.svg)](https://github.com/misaelaguayo/BRD/actions/workflows/python-app.yml)
 # Brd
 
 ## Motivation
