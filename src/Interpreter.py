@@ -129,6 +129,16 @@ class Interpreter(ExprVisitor, StmtVisitor):  # type: ignore (pyright confused b
     # stmt visitors ends
 
     # expr visitors starts
+    def visitCallExpr(self, expr: Expr):
+        # callee: object = self.evaluate(expr.callee)
+        # arguments: List[object] = []
+        # for argument in arguments:
+        #     arguments.append(self.evaluate(argument))
+
+        # function: BrdCallable = callee
+        # return function.call(self, arguments)
+        raise NotImplementedError("Not yet implemented")
+
     def visitAssignExpr(self, expr: Assign):
         value: object = self.evaluate(expr.value)
         self.environment.assign(expr.name, value)

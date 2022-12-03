@@ -50,7 +50,7 @@ class GenerateAst:
             output.write(f"# {types}\n\n")
             if extraImports:
                 for _import in extraImports:
-                    output.write(f"from {_import} import *\n")
+                    output.write(f"from src.{_import} import *\n")
             output.write("from abc import ABC, abstractmethod\n")
             output.write("from typing import List\n")
             output.write(f"class {baseName}(ABC):\n")
@@ -87,6 +87,7 @@ class GenerateAst:
             [
                 "Assign-name: Token,value: Expr",
                 "Binary- left: Expr,operator: Token,right: Expr",
+                "Call- callee: Expr,paren: Token,arguments: List[Expr]",
                 "Grouping- expression: Expr",
                 "Literal- value: object",
                 "Logical- left: Expr,operator: Token,right: Expr",

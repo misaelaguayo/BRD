@@ -1,6 +1,6 @@
 from typing import List
 from src.TokenType import Token, TokenType
-from src.Expr import Expr, Binary, Logical, Unary, Literal, Grouping, Variable, Assign
+from src.Expr import Call, Expr, Binary, Logical, Unary, Literal, Grouping, Variable, Assign
 from src.Stmt import Block, Stmt, Print, Expression, Var, If, While
 from src.Brd import Brd
 
@@ -145,6 +145,30 @@ class Parser:
             return self.advance()
         raise ParseError(self.peek(), message, self.brdSingleton)
 
+    def finishCall(self, callee: Expr) -> Expr:
+        arguments: List[Expr] = []
+        if not self.check(TokenType.RIGHT_PAREN):
+            # do while implemented in python
+            while True:
+                if len(arguments) >= 255:
+                    self.brdSingleton.error(self.peek(), "Can't have more than 255 arguments.")
+                arguments.append(self.expression())
+                if not self.match([TokenType.COMMA]):
+                    break
+        paren: Token = self.consume(
+            TokenType.RIGHT_PAREN, "Expect ')' after arguments."
+        )
+        return Call(callee, paren, arguments)
+
+    def call(self) -> Expr:
+        expr: Expr = self.primary()
+        while True:
+            if self.match([TokenType.LEFT_PAREN]):
+                expr = self.finishCall(expr)
+            else:
+                break
+        return expr
+
     def primary(self) -> Expr:
         if self.match([TokenType.FALSE]):
             return Literal(TokenType.FALSE)
@@ -168,7 +192,7 @@ class Parser:
             operator: Token = self.previous()
             right: Expr = self.unary()
             return Unary(operator, right)
-        return self.primary()
+        return self.call()
 
     def factor(self) -> Expr:
         expr: Expr = self.unary()

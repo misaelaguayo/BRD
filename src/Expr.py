@@ -1,5 +1,5 @@
 # Automatically generated using tool/GeneratedAst.py
-# ['Assign-name: Token,value: Expr', 'Binary- left: Expr,operator: Token,right: Expr', 'Grouping- expression: Expr', 'Literal- value: object', 'Logical- left: Expr,operator: Token,right: Expr', 'Unary- operator: Token,right: Expr', 'Variable-name: Token']
+# ['Assign-name: Token,value: Expr', 'Binary- left: Expr,operator: Token,right: Expr', 'Call- callee: Expr,paren: Token,arguments: List[Expr]', 'Grouping- expression: Expr', 'Literal- value: object', 'Logical- left: Expr,operator: Token,right: Expr', 'Unary- operator: Token,right: Expr', 'Variable-name: Token']
 
 from src.TokenType import *
 from abc import ABC, abstractmethod
@@ -19,6 +19,10 @@ class Visitor(ABC):
 
     @abstractmethod
     def visitBinaryExpr(self, expr):
+        ...
+
+    @abstractmethod
+    def visitCallExpr(self, expr):
         ...
 
     @abstractmethod
@@ -59,6 +63,16 @@ class Binary(Expr):
 
     def accept(self, visitor):
         return visitor.visitBinaryExpr(self)
+
+
+class Call(Expr):
+    def __init__(self, callee: Expr, paren: Token, arguments: List[Expr]):
+        self.callee = callee
+        self.paren = paren
+        self.arguments = arguments
+
+    def accept(self, visitor):
+        return visitor.visitCallExpr(self)
 
 
 class Grouping(Expr):
