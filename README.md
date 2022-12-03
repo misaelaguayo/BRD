@@ -16,8 +16,8 @@ Brd consists of four main components to execute a program
 All you need is python to run the REPL and the interpreter
 
 - REPL:
-    - `python Brd.py` will run the REPL
+    - `python -m src.Brd` will run the REPL
 - Interpreter:
-    - `python Brd.py <program.brd>` will run the interpreter for a brd program
+    - `python -m src.Brd <program.brd>` will run the interpreter for a brd program
     
 Some example programs are provided on the functionality of the program. The language grammar is specified in `Brd.py`

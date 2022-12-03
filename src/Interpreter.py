@@ -1,5 +1,5 @@
-from Environment import Environment
-from Expr import (
+from src.Environment import Environment
+from src.Expr import (
     Logical,
     Variable,
     Visitor as ExprVisitor,
@@ -10,9 +10,18 @@ from Expr import (
     Binary,
     Assign,
 )
-from Stmt import Block, If, Var, Visitor as StmtVisitor, Expression, Print, Stmt, While
-from TokenType import TokenType, Token
-from Brd import RunTimeError, Brd
+from src.Stmt import (
+    Block,
+    If,
+    Var,
+    Visitor as StmtVisitor,
+    Expression,
+    Print,
+    Stmt,
+    While,
+)
+from src.TokenType import TokenType, Token
+from src.Brd import RunTimeError, Brd
 from typing import List
 
 

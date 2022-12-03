@@ -1,8 +1,8 @@
 from typing import List
-from TokenType import Token, TokenType
-from Expr import Expr, Binary, Logical, Unary, Literal, Grouping, Variable, Assign
-from Stmt import Block, Stmt, Print, Expression, Var, If, While
-from Brd import Brd
+from src.TokenType import Token, TokenType
+from src.Expr import Expr, Binary, Logical, Unary, Literal, Grouping, Variable, Assign
+from src.Stmt import Block, Stmt, Print, Expression, Var, If, While
+from src.Brd import Brd
 
 
 class ParseError(Exception):

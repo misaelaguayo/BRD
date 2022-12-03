@@ -1,8 +1,8 @@
 # Automatically generated using tool/GeneratedAst.py
 # ['Block- statements: List[Stmt]', 'Expression- expression: Expr', 'If- condition: Expr,thenBranch: Stmt,elseBranch: Stmt|None', 'Print- expression: Expr', 'While- condition: Expr,body: Stmt', 'Var- name: Token,initializer: Expr']
 
-from Expr import *
-from TokenType import *
+from src.Expr import *
+from src.TokenType import *
 from abc import ABC, abstractmethod
 from typing import List
 

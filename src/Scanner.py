@@ -1,6 +1,6 @@
-from TokenType import *
+from src.TokenType import *
 from typing import List
-from Brd import Brd
+from src.Brd import Brd
 
 
 class Scanner:

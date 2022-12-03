@@ -1,6 +1,6 @@
 import sys
-from TokenType import Token, TokenType
-from Stmt import Stmt
+from src.TokenType import Token, TokenType
+from src.Stmt import Stmt
 from typing import List
 
 """
@@ -59,9 +59,9 @@ class Brd:
                 self.report(token.line, f"at '{token.lexeme}' ", message)
 
     def run(self, source: str) -> None:
-        from Parser import Parser
-        from Scanner import Scanner
-        from Interpreter import Interpreter
+        from src.Parser import Parser
+        from src.Scanner import Scanner
+        from src.Interpreter import Interpreter
 
         tokens = Scanner(source, self).scanTokens()
         parser: Parser = Parser(tokens, self)
@@ -84,12 +84,14 @@ class Brd:
     def __init__(self) -> None:
         self.hadError = False
 
-        if len(sys.argv) > 2:
-            raise Exception("Usage:Brd.py [script]")
-        elif len(sys.argv) == 2:
-            self.runFile(sys.argv[1])
-        else:
-            self.runPrompt()
+        # don't run for tests
+        if __name__ == "__main__":
+            if len(sys.argv) > 2:
+                raise Exception("Usage:Brd.py [script]")
+            elif len(sys.argv) == 2:
+                self.runFile(sys.argv[1])
+            else:
+                self.runPrompt()
 
 
 if __name__ == "__main__":
