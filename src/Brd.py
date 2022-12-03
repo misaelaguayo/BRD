@@ -11,10 +11,14 @@ program -> statement* EOF
 declaration -> varDecl | statement
 varDecl -> "var" IDENTIFIER ( "=" expression )? ";"
 statement ->    exprStmt | 
+                forStmt  |
                 ifStmt   | 
                 printStmt| 
                 whileStmt|
                 block
+forStmt -> "for" "(" ( varDecl | exprStatement | ";" )
+            expression? ";"
+            expression? ")" statement
 whileStmt -> "while" "(" expression ")" statement
 ifStmt -> "if" "(" expression ")" statement ( "else" statement )?
 block -> "{" declaration* "}"
