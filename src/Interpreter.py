@@ -21,7 +21,7 @@ from src.Stmt import (
     While,
 )
 from src.TokenType import TokenType, Token
-from src.Brd import RunTimeError, Brd
+from src.Brd import BrdCallable, RunTimeError, Brd
 from typing import List
 
 
@@ -130,14 +130,17 @@ class Interpreter(ExprVisitor, StmtVisitor):  # type: ignore (pyright confused b
 
     # expr visitors starts
     def visitCallExpr(self, expr: Expr):
-        # callee: object = self.evaluate(expr.callee)
-        # arguments: List[object] = []
-        # for argument in arguments:
-        #     arguments.append(self.evaluate(argument))
+        callee: object = self.evaluate(expr.callee)
+        arguments: List[object] = []
+        for argument in arguments:
+             arguments.append(self.evaluate(argument))
 
-        # function: BrdCallable = callee
-        # return function.call(self, arguments)
-        raise NotImplementedError("Not yet implemented")
+        if not isinstance(callee, BrdCallable):
+            raise RunTimeError(expr.paren, "Can only call functions and classes.")
+        function: BrdCallable = callee
+        if (len(arguments) != function.arity()):
+            raise RunTimeError(expr.paren, f"Expected {function.arity} arguments but got {len(arguments)}.")
+        return function.call(self, arguments)
 
     def visitAssignExpr(self, expr: Assign):
         value: object = self.evaluate(expr.value)

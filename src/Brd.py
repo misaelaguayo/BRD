@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 import sys
 from src.TokenType import Token, TokenType
 from src.Stmt import Stmt
@@ -45,6 +46,15 @@ class RunTimeError(Exception):
         self.message = message
         super().__init__(self.message)
 
+
+class BrdCallable(ABC):
+    from src import Interpreter
+    @abstractmethod
+    def call(self, interpreter: Interpreter, arguments: List[object]) -> object:
+        ...
+    @abstractmethod
+    def arity(self) -> int:
+        ...
 
 class Brd:
     def runtimeError(self, error: RunTimeError):
