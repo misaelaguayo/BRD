@@ -50,7 +50,7 @@ class GenerateAst:
             output.write(f"# {types}\n\n")
             if extraImports:
                 for _import in extraImports:
-                    output.write(f"from src.{_import} import *\n")
+                    output.write(f"from brd_package_misaelaguayo.{_import} import *\n")
             output.write("from abc import ABC, abstractmethod\n")
             output.write("from typing import List\n")
             output.write(f"class {baseName}(ABC):\n")

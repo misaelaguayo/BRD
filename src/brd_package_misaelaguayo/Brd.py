@@ -1,6 +1,6 @@
 import sys
-from src.TokenType import Token, TokenType
-from src.Stmt import Stmt
+from brd_package_misaelaguayo.TokenType import Token, TokenType
+from brd_package_misaelaguayo.Stmt import Stmt
 from typing import List
 
 """
@@ -65,9 +65,9 @@ class Brd:
                 self.report(token.line, f"at '{token.lexeme}' ", message)
 
     def run(self, source: str) -> None:
-        from src.Parser import Parser
-        from src.Scanner import Scanner
-        from src.Interpreter import Interpreter
+        from brd_package_misaelaguayo.Parser import Parser
+        from brd_package_misaelaguayo.Scanner import Scanner
+        from brd_package_misaelaguayo.Interpreter import Interpreter
 
         tokens = Scanner(source, self).scanTokens()
         parser: Parser = Parser(tokens, self)
@@ -98,6 +98,11 @@ class Brd:
                 self.runFile(sys.argv[1])
             else:
                 self.runPrompt()
+
+
+def run(source: str):
+    # run a program outside of a BRD class
+    Brd().run(source)
 
 
 if __name__ == "__main__":

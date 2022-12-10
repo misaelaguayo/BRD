@@ -1,8 +1,18 @@
 from typing import List
-from src.TokenType import Token, TokenType
-from src.Expr import Call, Expr, Binary, Logical, Unary, Literal, Grouping, Variable, Assign
-from src.Stmt import Block, Stmt, Print, Expression, Var, If, While
-from src.Brd import Brd
+from brd_package_misaelaguayo.TokenType import Token, TokenType
+from brd_package_misaelaguayo.Expr import (
+    Call,
+    Expr,
+    Binary,
+    Logical,
+    Unary,
+    Literal,
+    Grouping,
+    Variable,
+    Assign,
+)
+from brd_package_misaelaguayo.Stmt import Block, Stmt, Print, Expression, Var, If, While
+from brd_package_misaelaguayo.Brd import Brd
 
 
 class ParseError(Exception):
@@ -151,7 +161,9 @@ class Parser:
             # do while implemented in python
             while True:
                 if len(arguments) >= 255:
-                    self.brdSingleton.error(self.peek(), "Can't have more than 255 arguments.")
+                    self.brdSingleton.error(
+                        self.peek(), "Can't have more than 255 arguments."
+                    )
                 arguments.append(self.expression())
                 if not self.match([TokenType.COMMA]):
                     break

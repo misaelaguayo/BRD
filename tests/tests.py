@@ -1,6 +1,6 @@
 import io
 from unittest import TestCase, mock
-from src.Brd import Brd
+from brd_package_misaelaguayo.Brd import Brd
 
 
 class Tests(TestCase):

@@ -1,5 +1,5 @@
-from src.Environment import Environment
-from src.Expr import (
+from brd_package_misaelaguayo.Environment import Environment
+from brd_package_misaelaguayo.Expr import (
     Logical,
     Variable,
     Visitor as ExprVisitor,
@@ -10,7 +10,7 @@ from src.Expr import (
     Binary,
     Assign,
 )
-from src.Stmt import (
+from brd_package_misaelaguayo.Stmt import (
     Block,
     If,
     Var,
@@ -20,8 +20,8 @@ from src.Stmt import (
     Stmt,
     While,
 )
-from src.TokenType import TokenType, Token
-from src.Brd import RunTimeError, Brd
+from brd_package_misaelaguayo.TokenType import TokenType, Token
+from brd_package_misaelaguayo.Brd import RunTimeError, Brd
 from typing import List
 
 
