@@ -1,6 +1,6 @@
-from src.TokenType import *
+from brd_package_misaelaguayo.TokenType import *
 from typing import List
-from src.Brd import Brd
+from brd_package_misaelaguayo.Brd import Brd
 
 
 class Scanner:

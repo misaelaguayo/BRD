@@ -17,8 +17,8 @@ Brd consists of four main components to execute a program
 All you need is python to run the REPL and the interpreter
 
 - REPL:
-    - `python -m src.Brd` will run the REPL
+    - `python -m brd_package_misaelaguayo.Brd` will run the REPL
 - Interpreter:
-    - `python -m src.Brd <program.brd>` will run the interpreter for a brd program
+    - `python -m brd_package_misaelaguayo.Brd <program.brd>` will run the interpreter for a brd program
     
 Some example programs are provided on the functionality of the program. The language grammar is specified in `Brd.py`

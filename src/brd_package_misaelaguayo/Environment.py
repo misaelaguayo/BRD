@@ -1,6 +1,6 @@
 from typing import Dict
-from src.TokenType import Token
-from src.Brd import RunTimeError
+from brd_package_misaelaguayo.TokenType import Token
+from brd_package_misaelaguayo.Brd import RunTimeError
 
 
 class Environment:

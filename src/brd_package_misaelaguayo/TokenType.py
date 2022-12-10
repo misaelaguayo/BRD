@@ -1,8 +1,8 @@
-from enum import StrEnum, auto
+from enum import Enum, auto
 from typing import Any
 
 
-class TokenType(StrEnum):
+class TokenType(Enum):
     # Single-character tokens
     LEFT_PAREN = "("
     RIGHT_PAREN = ")"
@@ -27,28 +27,28 @@ class TokenType(StrEnum):
     LESS_EQUAL = "<="
 
     # Literals
-    IDENTIFIER = auto()
-    STRING = auto()
-    NUMBER = auto()
+    IDENTIFIER = "identifier"
+    STRING = "string"
+    NUMBER = "number"
 
     # Keywords
-    AND = auto()
-    CLASS = auto()
-    ELSE = auto()
-    FALSE = auto()
-    FUN = auto()
-    FOR = auto()
-    IF = auto()
-    NIL = auto()
-    OR = auto()
-    PRINT = auto()
-    RETURN = auto()
-    SUPER = auto()
-    THIS = auto()
-    TRUE = auto()
-    VAR = auto()
-    WHILE = auto()
-    EOF = auto()
+    AND = "and"
+    CLASS = "class"
+    ELSE = "else"
+    FALSE = "false"
+    FUN = "fun"
+    FOR = "for"
+    IF = "if"
+    NIL = "nil"
+    OR = "OR"
+    PRINT = "PRINT"
+    RETURN = "return"
+    SUPER = "super"
+    THIS = "this"
+    TRUE = "TRUE"
+    VAR = "var"
+    WHILE = "while"
+    EOF = "eof"
 
 
 class Token:

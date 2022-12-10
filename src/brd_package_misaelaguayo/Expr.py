@@ -1,7 +1,7 @@
 # Automatically generated using tool/GeneratedAst.py
 # ['Assign-name: Token,value: Expr', 'Binary- left: Expr,operator: Token,right: Expr', 'Call- callee: Expr,paren: Token,arguments: List[Expr]', 'Grouping- expression: Expr', 'Literal- value: object', 'Logical- left: Expr,operator: Token,right: Expr', 'Unary- operator: Token,right: Expr', 'Variable-name: Token']
 
-from src.TokenType import *
+from brd_package_misaelaguayo.TokenType import *
 from abc import ABC, abstractmethod
 from typing import List
 
